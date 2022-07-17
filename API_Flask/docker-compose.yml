@@ -1,0 +1,46 @@
+#### Docker Compose ####
+
+# version of the docker-compose
+version: '3.9'
+
+# Top-level entry point (the containers)
+services:
+# The Python application we just wrote
+  pythonapp:
+# Custom application name
+    container_name: pythonapp
+# Image for the container
+    image: pythonapp
+# Needed if using a custom image 
+    build: .
+# Ports we want to expose
+    ports:
+      - "80:80"
+# Define custom URL for the Postgres database
+    environment:
+      - DATABASE_URL=postgresql://postgres:Nadal22@db:5432/postgres
+# Dependency between services
+    depends_on:
+      - db
+
+# Service for PG DB
+  db:
+# Default name
+    container_name: db
+# Use image from PG team
+    image: postgres:12
+# Ports to expose
+    ports:
+      - "5432:5432"
+# Define  environment variables for the Postgres service
+    environment:
+      - POSTGRES_PASSWORD=Nadal22
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=ATP_tour_data
+# Named volume called pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+# Define the actual volume
+volumes:
+  pgdata: {}
